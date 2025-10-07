@@ -1,1 +1,7 @@
-[]
+{
+    "Categories": true,
+    "Products": true,
+    "Carts": true,
+    "Orders": true,
+    "Payments": true
+}
