@@ -3,5 +3,6 @@
     "Products": true,
     "Carts": true,
     "Orders": true,
-    "Payments": true
+    "Payments": true,
+    "Migrate": true
 }
