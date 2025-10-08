@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cart_id')->constrained()->cascadeOnDelete();
 
-            $table->string('status')->default('pending');
+            $table->enum('status', ['pending', 'processing', 'delivered', 'cancelled'])
+          ->default('pending');
+        
             $table->timestamps();
         });
     }
