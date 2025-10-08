@@ -16,3 +16,4 @@ Route::prefix('products')->name('products.')->group(function () {
     Route::delete('/{product}', [ProductsController::class, 'destroy'])->name('destroy');
 });
 
+

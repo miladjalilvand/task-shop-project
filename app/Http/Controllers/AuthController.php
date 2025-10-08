@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Modules\Carts\Models\Cart;
 
 class AuthController extends Controller
 {
@@ -46,6 +47,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
+        Cart::create(['user_id'=> $user->id]);
         return redirect('/');
     }
 
