@@ -4,6 +4,7 @@ namespace Modules\Carts\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartsController extends Controller
 {
@@ -53,4 +54,14 @@ class CartsController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id) {}
+
+
+    public function showCart()
+    {
+        $user = Auth::user();
+        $cart = $user->cart;
+        $cartItems =  $cart->cartItems;
+
+        return view('cart::showCart',compact('cartItems'));
+    }
 }

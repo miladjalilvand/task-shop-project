@@ -15,7 +15,7 @@ class CartItem extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = ['user_id', 'product_id', 'quantity'];
+    protected $fillable = ['cart_id', 'product_id', 'quantity'];
     
     public function cart()
     {
