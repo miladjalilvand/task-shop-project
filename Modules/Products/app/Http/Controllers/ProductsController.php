@@ -51,7 +51,7 @@ class ProductsController extends Controller
         //HANDLE SAFE SLUG
 
         if (empty($newProduct['slug'])) {
-            $newProduct['slug'] = $this->makeUniqueSlug($newProduct['slug']);
+            $newProduct['slug'] = $this->makeUniqueSlug($newProduct['name']);
         }
 
         //HANDLE UPLOAD IMAGE
@@ -116,15 +116,18 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
+       
+
         return view('products::show');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        return view('products::edit');
+         $categories = Category::all();
+        return view('products::edit',compact('product' , 'categories'));
     }
 
     /**
