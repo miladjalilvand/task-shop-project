@@ -25,6 +25,7 @@
 <ul class="space-y-2 font-medium">
 
     <li>
+       
         <a href="{{route('dashboard.orders.index')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-labelledby="title-orders">
   <title id="title-orders">Orders</title>
