@@ -7,7 +7,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('products', ProductsController::class)->names('products');
 });
 
-Route::prefix('products')->name('products.')->group(function () {
+Route::prefix('dashboard/products')->name('products.')->group(function () {
     Route::get('/', [ProductsController::class, 'index'])->name('index');
     Route::get('/create', [ProductsController::class, 'create'])->name('create');
     Route::post('/', [ProductsController::class, 'store'])->name('store');
