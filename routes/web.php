@@ -22,6 +22,6 @@ Route::get('/dashboard', function(){
     return view('dashboard');   
 })->middleware(['auth','role'])->name('dashboard');
 
-Route::get('dashboard/users',[UserController::class , 'index'])->name('dashboard.users.index');
-Route::patch('users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
+Route::middleware(['auth', 'role'])->get('dashboard/users',[UserController::class , 'index'])->name('dashboard.users.index');
+Route::middleware(['auth', 'role'])->patch('users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
 

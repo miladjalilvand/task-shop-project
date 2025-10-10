@@ -8,7 +8,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-Route::prefix('dashboard/categories')->name('dashboard.categories.')->group(function () {
+Route::middleware(['auth', 'role'])->prefix('dashboard/categories')->name('dashboard.categories.')->group(function () {
     Route::get('/', [CategoriesController::class, 'index'])->name('index');
     Route::get('/create', [CategoriesController::class, 'create'])->name('create');
     Route::post('/', [CategoriesController::class, 'store'])->name('store');
