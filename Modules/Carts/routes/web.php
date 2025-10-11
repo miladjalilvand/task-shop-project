@@ -6,3 +6,7 @@ use Modules\Carts\Http\Controllers\CartsController;
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('carts', CartsController::class)->names('carts');
 });
+
+
+
+Route::middleware('auth')->post('/add-to-cart',[CartsController::class,'addToCart'])->name('addToCart');

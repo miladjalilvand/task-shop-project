@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Orders\Models\Order;
+use Modules\Carts\Models\CartItem;
 
 // use Modules\Carts\Database\Factories\CartFactory;
 
@@ -29,7 +30,7 @@ class Cart extends Model
     }
     public function cartItems()
     {
-        $this->hasMany(CartItem::class);
+       return $this->hasMany(CartItem::class);
     }
 
     // protected static function newFactory(): CartFactory

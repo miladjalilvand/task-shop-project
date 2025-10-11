@@ -5,6 +5,7 @@ namespace Modules\Carts\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Products\Models\Product;
+use Modules\Carts\Models\Cart;
 
 // use Modules\Carts\Database\Factories\CartItemFactory;
 
