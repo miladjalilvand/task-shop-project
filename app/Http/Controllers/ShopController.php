@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Categories\Models\Category;
 use Modules\Products\Models\Product;
 
@@ -29,13 +30,15 @@ class ShopController extends Controller
 
     public function show($slug)
     {
+        $cartCount = Auth::check() ? Auth::user()->cart?->cartItems()->count() ?? 0 : 0;
+
         $product = Product::where('slug', $slug)->with('category')->firstOrFail();
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->take(4)
             ->get();
 
-        return view('shop.details', compact('product', 'relatedProducts'));
+        return view('shop.details', compact('product', 'relatedProducts','cartCount'));
     }
 
     private function getCategoryIds($category)
