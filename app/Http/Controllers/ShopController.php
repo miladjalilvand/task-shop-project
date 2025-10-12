@@ -13,19 +13,28 @@ class ShopController extends Controller
     {
         $categories = Category::whereNull('parent_id')->with('children')->get();
         $categorySlug = $request->query('category');
-        
+        $priceSort = $request->query('price_sort');
+
+        $query = Product::query();
+
         if ($categorySlug) {
             $category = Category::where('slug', $categorySlug)->with('children')->first();
             if (!$category) {
                 abort(404, 'دسته‌بندی یافت نشد');
             }
             $categoryIds = $this->getCategoryIds($category);
-            $products = Product::whereIn('category_id', $categoryIds)->paginate(12);
-        } else {
-            $products = Product::paginate(12);
+            $query->whereIn('category_id', $categoryIds);
         }
 
-        return view('shop.index', compact('categories', 'products', 'categorySlug'));
+        if ($priceSort === 'highest') {
+            $query->orderBy('price', 'desc');
+        } elseif ($priceSort === 'lowest') {
+            $query->orderBy('price', 'asc');
+        }
+
+        $products = $query->paginate(12);
+
+        return view('shop.index', compact('categories', 'products', 'categorySlug', 'priceSort'));
     }
 
     public function show($slug)

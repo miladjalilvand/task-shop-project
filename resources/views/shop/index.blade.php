@@ -4,10 +4,9 @@
 
 @section('content')
 <div class="bg-gray-100">
-   
     <div class="max-w-screen-xl mx-auto p-4 flex flex-col md:flex-row gap-6">
         <!-- Sidebar for Categories -->
-        <aside class=" bg-white rounded-lg shadow-md p-4">
+        <aside class="bg-white rounded-lg shadow-md p-4">
             <h2 class="text-xl font-bold mb-4">دسته‌بندی‌ها</h2>
             <ul class="space-y-2">
                 @php
@@ -34,6 +33,20 @@
         <!-- Product Grid -->
         <div class="w-full md:w-3/4">
             <h1 class="text-3xl font-bold mb-6">{{ $categorySlug ? ($categories->firstWhere('slug', $categorySlug) ? $categories->firstWhere('slug', $categorySlug)->name : 'دسته‌بندی یافت نشد') : 'همه محصولات' }}</h1>
+            
+            <!-- Price Filter Dropdown -->
+            <div class="mb-6">
+                <form method="GET" action="{{ route('shop.index') }}">
+                    <input type="hidden" name="category" value="{{ $categorySlug }}">
+                    <label for="price_sort" class="text-lg font-semibold mr-2">مرتب‌سازی بر اساس قیمت:</label>
+                    <select name="price_sort" id="price_sort" onchange="this.form.submit()" class="p-2 border rounded-md w-52">
+                        <option value="">پیش‌فرض</option>
+                        <option value="highest" {{ $priceSort == 'highest' ? 'selected' : '' }}>بیشترین به کمترین</option>
+                        <option value="lowest" {{ $priceSort == 'lowest' ? 'selected' : '' }}>کمترین به بیشترین</option>
+                    </select>
+                </form>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($products as $product)
                     <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -55,7 +68,7 @@
                 @endforeach
             </div>
             <div class="mt-6">
-                {{ $products->links() }}
+                {{ $products->appends(['price_sort' => $priceSort, 'category' => $categorySlug])->links() }}
             </div>
         </div>
     </div>
