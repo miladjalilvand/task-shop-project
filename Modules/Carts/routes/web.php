@@ -10,3 +10,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 Route::middleware('auth')->post('/add-to-cart',[CartsController::class,'addToCart'])->name('addToCart');
+Route::middleware('auth')->get('/myCart',[CartsController::class,'showCart'])->name('myCart');
+Route::post('/cart/add-quantity/{cartItemId}', [CartsController::class, 'addQuantity'])->name('cart.addQuantity');
+Route::post('/cart/lose-quantity/{cartItemId}', [CartsController::class, 'loseQuantity'])->name('cart.loseQuantity');
+Route::post('/cart/clear', [CartsController::class, 'clearCart'])->name('cart.clear');
+
+

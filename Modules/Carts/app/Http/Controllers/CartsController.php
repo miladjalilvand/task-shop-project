@@ -60,11 +60,13 @@ class CartsController extends Controller
 
     public function showCart()
     {
+        
         $user = Auth::user();
         $cart = $user->cart;
         $cartItems = $cart->cartItems;
 
-        return view('cart::showCart', compact('cartItems'));
+
+        return view('carts::show', compact('cartItems'));
     }
 
     public function addToCart(Request $request)

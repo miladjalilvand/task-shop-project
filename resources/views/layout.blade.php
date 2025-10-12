@@ -28,7 +28,7 @@
                     $count = isset($cartCount) ? $cartCount : (Auth::user()->cart ? Auth::user()->cart->cartItems()->count() : 0);
                 @endphp
 
-                <a  class="relative flex items-center gap-1 text-gray-700 hover:text-blue-600">
+                <a href="{{ route('myCart') }}" class="relative flex items-center gap-1 text-gray-700 hover:text-blue-600">
                     🛒
                     <span>سبد خرید</span>
                     @if($count > 0)
