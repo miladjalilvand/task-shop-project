@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', $product->name ?? 'جزییات محصول')
+@section('title', محصولات')
 
 @section('content')
 <div class="bg-gray-100">
