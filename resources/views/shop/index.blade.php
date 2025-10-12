@@ -16,7 +16,8 @@
                             echo '<li>';
                             echo '<a href="' . route('shop.index', ['category' => $category->slug]) . '" class="block py-2 px-3 text-gray-900 hover:bg-gray-100 rounded ' 
                                 . ($categorySlug == $category->slug ? 'text-blue-700 font-semibold' : '') . '" style="padding-right: ' .
-                                 ($depth * 1.5) . 'rem;">' . ($depth > 0 ? '↳ ' : '') . $category->name . '</a>';
+                                 ($depth * 1.5) . 'rem;">' . ($depth > 0 ? '↳ ' : '') . $category->name . '
+                                 </a>';
                             if ($category->children->isNotEmpty()) {
                                 echo '<ul class="space-y-2">';
                                 renderCategoryTree($category->children, $categorySlug, $depth + 1);
