@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,16 +17,7 @@
             <a href="{{ url('/') }}" class="text-gray-700 hover:text-blue-600">خانه</a>
             <a href="{{ url('/shop') }}" class="text-gray-700 hover:text-blue-600">محصولات</a>
             @auth
-
-                {{-- <button data-drawer-target="cart-drawer" data-drawer-show="cart-drawer" aria-controls="cart-drawer" class="relative flex items-center gap-1 text-gray-700 hover:text-blue-600">
-                    🛒
-                    <span>سبد خرید</span>
-                    @if($count > 0)
-                        <span class="absolute -top-2 -right-3 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                            {{ $count }}
-                        </span>
-                    @endif
-                </button> --}}
+                {{-- اگر می‌خوای آیکون سبد رو فعال کنی، اینجا قرار بده --}}
             @else
                 <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600">ورود</a>
             @endauth
@@ -58,17 +49,29 @@
                 <div class="space-y-4">
                     @foreach($cartItems as $item)
                         <div class="flex items-center gap-4 border-b pb-4">
-                            <img src="{{ $item->product->image ?? 'https://via.placeholder.com/100' }}" alt="{{ $item->product->name }}" class="w-24 h-24 object-cover rounded">
+                            {{-- عکس محصول: اگر در storage باشه از storage لود کن، در غیر این صورت placeholder --}}
+                            @php
+                                $imagePath = $item->product->image ?? null;
+                                $hasImage = $imagePath && \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath);
+                            @endphp
+
+                            @if($hasImage)
+                                <img src="{{ asset('storage/' . $imagePath) }}" alt="{{ $item->product->name }}" class="w-24 h-24 object-cover rounded">
+                            @else
+                                <img src="https://via.placeholder.com/100x100?text=No+Image" alt="بدون تصویر" class="w-24 h-24 object-cover rounded">
+                            @endif
+
                             <div class="flex-1">
                                 <h2 class="text-lg font-semibold">{{ $item->product->name }}</h2>
                                 <p class="text-gray-600">قیمت واحد: {{ number_format($item->price / 100, 2) }} تومان</p>
                                 <p class="text-gray-600">تعداد: {{ $item->quantity }}</p>
                                 <p class="text-gray-600">جمع: {{ number_format($item->total / 100, 2) }} تومان</p>
-                                @if($item->discount_amount > 0)
+                                @if(!empty($item->discount_amount) && $item->discount_amount > 0)
                                     <p class="text-green-600">تخفیف: {{ number_format($item->discount_amount / 100, 2) }} تومان</p>
                                 @endif
                             </div>
-                            <div class="flex items-center gap-2">
+
+                            <div class="flex flex-col items-center gap-2">
                                 <form action="{{ route('cart.addQuantity', $item->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded">+</button>
@@ -80,35 +83,32 @@
                             </div>
                         </div>
                     @endforeach
-                    <div class="flex justify-between items-center mt-6">
-                        {{-- <form action="{{ route('cart.clear') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">خالی کردن سبد خرید</button>
-                    </form> --}}
 
-                    <div class="flex flex-col items-end space-y-2">
-                        <p class="text-xl font-semibold">جمع کل: {{ number_format($cartItems->sum('total') / 100, 2) }} تومان</p>
-                        
-                        <!-- دکمه ثبت سفارش -->
-                        <form action="{{ route('cart.createOrder') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700">
-                                ثبت سفارش
-                            </button>
-                        </form>
-                        <form action="{{ route('cart.clear') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">خالی کردن سبد خرید</button>
-                        </form>
-                        <p class="text-xl font-semibold">جمع کل: {{ number_format($cartItems->sum('total') / 100, 2) }} تومان</p>
+                    <div class="flex justify-between items-center mt-6">
+                        <div></div>
+                        <div class="flex flex-col items-end space-y-2">
+                            <p class="text-xl font-semibold">جمع کل: {{ number_format($cartItems->sum('total') / 100, 2) }} تومان</p>
+
+                            <!-- دکمه ثبت سفارش -->
+                            <form action="{{ route('cart.createOrder') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700">
+                                    ثبت سفارش
+                                </button>
+                            </form>
+
+                            <form action="{{ route('cart.clear') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">خالی کردن سبد خرید</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             @endif
         </div>
     </div>
 
-    <!-- Include Cart Drawer -->
-
+    <!-- اگر می‌خوای Drawer سبد رو اضافه کنی، اینجا include کن -->
 
 </body>
 </html>
