@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class
         ]);
+         $middleware->alias([
+            'checkAuthPages' => \App\Http\Middleware\authorizitionPagesMiddleeare::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
