@@ -32,7 +32,7 @@ class ShopController extends Controller
             $query->orderBy('price', 'asc');
         }
 
-        $products = $query->paginate(12);
+        $products = $query->paginate(4);
 
         return view('shop.index', compact('categories', 'products', 'categorySlug', 'priceSort'));
     }
