@@ -20,7 +20,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::get('/dashboard', function(){
-    return view('dashboard');   
+    return redirect('/dashboard/orders');   
 })->middleware(['auth','role'])->name('dashboard');
 
 Route::middleware(['auth', 'role'])->get('dashboard/users',[UserController::class , 'index'])->name('dashboard.users.index');
