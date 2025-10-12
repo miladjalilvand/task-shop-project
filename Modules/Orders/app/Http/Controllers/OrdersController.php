@@ -41,43 +41,91 @@ class OrdersController extends Controller
      * Create a new order from the user's cart.
      */
     public function create(Request $request)
-    {
-        $user = Auth::user();
-        if (! $user) {
-            return redirect()->back()->withErrors(['auth' => 'ابتدا وارد سیستم شوید.']);
-        }
-
-        DB::beginTransaction();
-        try {
-            $cart = $user->cart;
-            if (! $cart || $cart->cartItems()->count() === 0) {
-                return redirect()->back()->withErrors(['cart' => 'سبد خرید شما خالی است.']);
-            }
-
-            // Calculate total, discount, and items count from cart items
-            $total = $cart->cartItems()->sum('total');
-            $discount = $cart->cartItems()->sum('discount_amount');
-            $itemsCount = $cart->cartItems()->count();
-
-            // Create new order
-            $order = Order::create([
-                'cart_id' => $cart->id,
-                'status' => 'pending', // Default status
-                'discount' => $discount,
-                'total' => $total,
-                'items_count' => $itemsCount, // Store items count
-            ]);
-
-            // Optionally, clear cart items after order creation
-            $cart->cartItems()->delete();
-
-            DB::commit();
-            return redirect()->route('orders.index')->with('success', 'سفارش با موفقیت ایجاد شد.');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'خطایی رخ داد. دوباره تلاش کنید.']);
-        }
+{
+    $user = Auth::user();
+    if (!$user) {
+        return redirect()->back()->withErrors(['auth' => 'ابتدا وارد سیستم شوید.']);
     }
+
+    DB::beginTransaction();
+    try {
+        $cart = $user->cart;
+        if (!$cart || $cart->cartItems()->count() === 0) {
+            return redirect()->back()->withErrors(['cart' => 'سبد خرید شما خالی است.']);
+        }
+
+        // لود آیتم‌های سبد با محصولات
+        $cartItems = $cart->cartItems()->with('product')->get();
+
+        // بررسی موجودی محصولات
+        foreach ($cartItems as $item) {
+            if ($item->product->stock < $item->quantity) {
+                DB::rollBack();
+                return redirect()->back()->withErrors([
+                    'stock' => "موجودی محصول '{$item->product->name}' کافی نیست. موجودی: {$item->product->stock}، درخواستی: {$item->quantity}"
+                ]);
+            }
+        }
+
+        // ایجاد سفارش (فقط cart_id و status)
+        $order = Order::create([
+            'cart_id' => $cart->id,
+            'status' => 'pending',
+        ]);
+
+        // کاهش موجودی محصولات
+        foreach ($cartItems as $item) {
+            $item->product->decrement('stock', $item->quantity);
+        }
+
+        // حذف آیتم‌های سبد خرید
+        $cart->cartItems()->delete();
+
+        DB::commit();
+        return redirect()->route('orders.index')->with('success', 'سفارش با موفقیت ثبت شد و موجودی محصولات به‌روزرسانی شد.');
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        return redirect()->back()->withErrors(['error' => 'خطایی رخ داد. دوباره تلاش کنید.'.$e]);
+    }
+}
+    // public function create(Request $request)
+    // {
+    //     $user = Auth::user();
+    //     if (! $user) {
+    //         return redirect()->back()->withErrors(['auth' => 'ابتدا وارد سیستم شوید.']);
+    //     }
+
+    //     DB::beginTransaction();
+    //     try {
+    //         $cart = $user->cart;
+    //         if (! $cart || $cart->cartItems()->count() === 0) {
+    //             return redirect()->back()->withErrors(['cart' => 'سبد خرید شما خالی است.']);
+    //         }
+
+    //         // Calculate total, discount, and items count from cart items
+    //         $total = $cart->cartItems()->sum('total');
+    //         $discount = $cart->cartItems()->sum('discount_amount');
+    //         $itemsCount = $cart->cartItems()->count();
+
+    //         // Create new order
+    //         $order = Order::create([
+    //             'cart_id' => $cart->id,
+    //             'status' => 'pending', // Default status
+    //             'discount' => $discount,
+    //             'total' => $total,
+    //             'items_count' => $itemsCount, // Store items count
+    //         ]);
+
+    //         // Optionally, clear cart items after order creation
+    //         $cart->cartItems()->delete();
+
+    //         DB::commit();
+    //         return redirect()->route('orders.index')->with('success', 'سفارش با موفقیت ایجاد شد.');
+    //     } catch (\Throwable $e) {
+    //         DB::rollBack();
+    //         return redirect()->back()->withErrors(['error' => 'خطایی رخ داد. دوباره تلاش کنید.']);
+    //     }
+    // }
 
     /**
      * Update the status of an order.

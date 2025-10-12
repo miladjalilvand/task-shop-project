@@ -42,7 +42,7 @@
                                     </form>
                                 </td>
                                 <td class="px-4 py-2 text-right">{{ $order->created_at->format('Y-m-d H:i') }}</td>
-                                <td class="px-4 py-2 text-right">
+                                {{-- <td class="px-4 py-2 text-right">
                                     <div class="flex space-x-2 space-x-reverse">
                                         <form action="{{ route('orders.destroy', $order->id) }}" method="POST"
                                               onsubmit="return confirm('آیا مطمئن هستید که می‌خواهید این سفارش را حذف کنید؟');">
@@ -54,7 +54,7 @@
                                             </button>
                                         </form>
                                     </div>
-                                </td>
+                                </td> --}}
                             </tr>
                         @endforeach
                     </tbody>

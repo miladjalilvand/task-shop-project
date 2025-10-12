@@ -81,6 +81,21 @@
                         </div>
                     @endforeach
                     <div class="flex justify-between items-center mt-6">
+                        {{-- <form action="{{ route('cart.clear') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">خالی کردن سبد خرید</button>
+                    </form> --}}
+
+                    <div class="flex flex-col items-end space-y-2">
+                        <p class="text-xl font-semibold">جمع کل: {{ number_format($cartItems->sum('total') / 100, 2) }} تومان</p>
+                        
+                        <!-- دکمه ثبت سفارش -->
+                        <form action="{{ route('cart.createOrder') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700">
+                                ثبت سفارش
+                            </button>
+                        </form>
                         <form action="{{ route('cart.clear') }}" method="POST">
                             @csrf
                             <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">خالی کردن سبد خرید</button>
