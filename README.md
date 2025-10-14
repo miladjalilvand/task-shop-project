@@ -172,7 +172,3 @@ Developed by **Milad Jalilvand**
 [GitHub: miladjalilvand](https://github.com/miladjalilvand)
 
 ---
-
-## 📜 License
-This project is released without a public license.  
-You can add your preferred license (e.g., MIT) if needed.
